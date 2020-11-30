@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Aug 22 16:56:35 2020
 
-@author: PFC
+@author: Young Cho
 
-This script is for OMS-6740-Fall, HW1: Kmeans algorithm
 Note the term Kmeans specifically refer to the one with L2 distance
 If other distance is used, then the algorithm would be refer to 'generalized Kmeans', which
 will be more complicated because of the optimization problem.
