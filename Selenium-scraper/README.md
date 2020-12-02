@@ -1,0 +1,85 @@
+## Useful Docker Selenium container image for automation
+
+#### BUILD IMAGE:
+` docker build -t selenium . ` (in the same path as the Dockerfile)
+
+#### Running with fabric
+Run ```fab help``` for tasks
+ - ```fab run```
+   - Runs a container, mounting ./code and local /etc/hosts, runs ./code/main.py and removes the container when done
+ - ```fab test```
+   - Runs a container, mounting ./code and local /etc/hosts, runs ./code/test.py and removes the container when done
+
+
+#### RUN CONTAINER:
+
+ ``` 
+ // run container, mount the python code, mount our local etc/hosts file, image to run (selenium) execute python
+ docker run --rm -v $(pwd)/code:/code -v /etc/hosts:/etc/hosts -it selenium python /code/main.py
+ ```
+
+
+#### EXAMPLE OF CODE WITH SELENIUM AND FIREFOX:
+```
+from pyvirtualdisplay import Display
+from selenium import webdriver
+
+display = Display(visible=0, size=(800, 600))
+display.start()
+
+# now Firefox will run in a virtual display. 
+# you will not see the browser.
+browser = webdriver.Firefox()
+browser.get('http://www.google.com')
+print browser.title
+browser.quit()
+
+display.stop()
+```
+
+#### EXAMPLE OF CODE WITH GOOGLE HEADLESS
+```
+from pyvirtualdisplay import Display
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+display = Display(visible=0, size=(1200, 800))
+display.start()
+# start Chrome
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--window-size=1200x800")
+browser = webdriver.Chrome(chrome_options=chrome_options)
+browser.get('http://google.com/')
+print(browser.title)
+browser.quit()
+display.stop()
+```
+
+#### Example with phantomjs
+```
+ browser = webdriver.PhantomJS("phantomjs")
+browser.get("https://twitter.com/StackStatus")
+print(browser.title)
+
+pause = 3
+
+lastHeight = browser.execute_script("return document.body.scrollHeight")
+print(lastHeight)
+i = 0
+browser.save_screenshot("/code/screenshots/test03_1_" + str(i) + ".png")
+while True:
+    browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(pause)
+    newHeight = browser.execute_script("return document.body.scrollHeight")
+    print(newHeight)
+    if newHeight == lastHeight:
+        break
+    lastHeight = newHeight
+    i += 1
+    browser.save_screenshot("/code/screenshots/test03_1_" + str(i) + ".png")
+
+browser.quit()
+```
+

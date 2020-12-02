@@ -1,0 +1,5 @@
+*.idea
+/code/screenshots/*
+*.vscode
+*__pycache*
+*.swp
