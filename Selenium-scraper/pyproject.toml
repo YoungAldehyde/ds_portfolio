@@ -2,7 +2,7 @@
 name = "Selenium python docker scraper"
 version = "0.1.0"
 description = ""
-authors = ["kevinhowbrook <kbhowbrook@gmail.com>"]
+
 
 [tool.poetry.dependencies]
 python = "^3.7"
