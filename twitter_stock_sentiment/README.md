@@ -35,10 +35,6 @@ Download Stopwords and Punkt Word Tokenizer
     cd twitter-stock-sentiment
     python gui.py
 
-## Authors
-
-**Pooja Thakoor** 
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
