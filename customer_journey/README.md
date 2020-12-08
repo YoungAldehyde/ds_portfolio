@@ -310,4 +310,4 @@ else:
 
 Here is the final chart:
 
-![demo](images/sankey_demo1.png)
+![demo](https://raw.githubusercontent.com/YoungAldehyde/projects/master/customer_journey/sankey_demo1.PNG)
