@@ -7,13 +7,13 @@ Example Flask application for demo purpose
 First, you need to clone this repo:
 
 ```bash
-$ git clone 
+$ git clone https://github.com/YoungAldehyde/projects.git
 ```
 
 Or:
 
 ```bash
-$ git clone 
+$ git clone https://github.com/YoungAldehyde/projects.git
 ```
 
 Then change into the `flask-demo` folder:
