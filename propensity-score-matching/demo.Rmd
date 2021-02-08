@@ -1,0 +1,57 @@
+---
+title: "Propensity Score Matching"
+output: html_notebook
+---
+
+This is a demo implementation of Propensity Score Matching technique on this [journal](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.665.635&rep=rep1&type=pdf).
+
+We will be using 'MatchIt' package in R. We will first need to create dataset due to the original dataset ('newyork.csv') not being available online. This simulated dataset will contain the following covariates including *school size*, *percentage of minority students*, and *free and reduced lunch* along with dependent variable and a “treatment” indicator, indicating whether or not a student attends public (1) or private (0) school.
+
+Next, we create the model, which is a logistic regression with RHS variable of treatment indicator (public school vs. private) regressed upon: size, minority, and freelunch. Next, select the ratio, which we set to one indicating that each student in the treatment group (public school) will be matched with one student in the control group (private).
+
+
+```{r}
+library(MatchIt)
+set.seed(12345)
+studentID = 1:10000
+dep = abs(rnorm(10000))=
+public = c(rep(1,5000), rep(0,5000))
+size = abs(rnorm(10000)*10000)
+minority = abs(rnorm(10000)/10)
+freeLunch = abs(rnorm(10000)/10)
+propScore = cbind(public, size, minority, freeLunch)
+propScore = as.data.frame(propScore)
+
+m.out = matchit(public ~ size + minority + freeLunch, data = propScore, method = "nearest", ratio = 1)
+```
+
+
+Next, we look at a summary. The summary function provides information for both the full and the matched data set. First on the balance for all of the data without matching. It also provides information the means of the treated and the control. It also provides the standard deviation for the control group. It provides means and sd’s for both the treatment and control groups across each of the included covariates. Lastly there are QQ columns for the mean, median, and max quantiles differences between the treatment and control. Smaller QQ values indicate better matching data.
+
+We should interpret the summary of balance for matched data the same way as for the summary of balance for all data with the only difference being that the summary of balance for matched data uses only matched data. The user can then, compare the differences in means and quantile reductions to make sure if the matching process reduced the observed differences between the two groups with the matched data. Finally, there is the percent balance improvement, and this provides percentage improvement by using the matched data relative to all the data. In this example, there is no improvement due to the dataset being randomly generated.
+
+Finally, two plots for evaluating the effectiveness of the matching procedure are provided (shows the distribution of unmatched and matched pairs for both treatment and control groups).
+
+You can check how close the data are from the matched and unmatched groups showing the matched groups similarities among the observed covariates. Next, we can evaluate a histogram of the matched and the original data sets to evaluate how much better the matching procedures matched the data.
+
+
+```{r}
+summary(m.out)
+```
+
+
+```{r}
+m.outCSV = match.data(m.out) 
+write.csv(m.outCSV, "m.outCSV.csv")
+plot(m.out, type = "jitter")
+```
+
+
+```{r}
+plot(m.out, type = "hist")
+```
+
+```{r}
+library(Zelig)
+z.out = zelig(dep ~ public + minority + freeLunch + size, model = "ls",data = m.outCSV)
+```
